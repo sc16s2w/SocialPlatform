@@ -1,0 +1,10 @@
+server:
+ port: 9005
+spring:
+ application:
+  name: tensquare-split
+ data:
+  mongodb:
+   database: commentdb
+   host: 127.0.0.1
+   port: 27017

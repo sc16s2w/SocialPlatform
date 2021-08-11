@@ -11,6 +11,8 @@
     <modules>
         <module>tensquare_common</module>
         <module>tensquare_ariticle</module>
+        <module>mongo_demo</module>
+        <module>tensquare_split</module>
     </modules>
 
     <properties>
