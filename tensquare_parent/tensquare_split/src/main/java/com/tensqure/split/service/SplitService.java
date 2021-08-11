@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
 import org.springframework.data.mongodb.core.query.Query;
@@ -25,6 +26,7 @@ public class SplitService {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
 
     /**
      * 查询所有评论
@@ -90,6 +92,7 @@ public class SplitService {
      * 给评论点赞
      * @param splitId
      */
+    //用redis避免用户重复点赞
     public void thumbupSplit(String splitId) {
         //用了两次操作，有可能查询和写入的不同导致了赞数不统一
 //        Split split = this.splitRepository.findById(splitId).get();

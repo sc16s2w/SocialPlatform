@@ -5,6 +5,7 @@ import com.tensqure.split.service.SplitService;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.List;
 public class SplitController {
     @Autowired
     private SplitService splitService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 查询所有评论
@@ -89,7 +93,14 @@ public class SplitController {
      */
     @PutMapping("/thumbup/{splitId}")
     public Result thumbupSplit(@PathVariable("splitId")String splitId){
-        this.splitService.thumbupSplit(splitId);
-        return new Result(true, StatusCode.OK,"评论点赞成功");
+        String userId ="123";
+        //查询用户点赞信息，根据用户和评论id
+        Object flag = redisTemplate.opsForValue().get("thumbup_"+userId+"_"+splitId);
+        if(flag == null){
+            this.splitService.thumbupSplit(splitId);
+            redisTemplate.opsForValue().set("thumbup_"+userId+"_"+splitId,1);
+            return new Result(true, StatusCode.OK,"评论点赞成功");
+        }
+        return new Result(false,StatusCode.REMOTEERROR,"该用户已经为该条评论点过赞了");
     }
 }

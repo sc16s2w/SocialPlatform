@@ -13,6 +13,7 @@
         <module>tensquare_ariticle</module>
         <module>mongo_demo</module>
         <module>tensquare_split</module>
+        <module>tensquare_base</module>
     </modules>
 
     <properties>

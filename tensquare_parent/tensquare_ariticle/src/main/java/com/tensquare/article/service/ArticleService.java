@@ -1,7 +1,6 @@
 package com.tensquare.article.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.tensquare.article.dao.ArticleDao;
 import com.tensquare.article.pojo.Article;
