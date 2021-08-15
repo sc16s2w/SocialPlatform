@@ -1,2 +1,6 @@
-/Users/wangsiwei/Desktop/SocialPlatform/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/BaseApplication.java
-/Users/wangsiwei/Desktop/SocialPlatform/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/pojo/Label.java
+/Users/wangsiwei/Downloads/SocialPlatform-main/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/config/MyBatisPlusConfig.java
+/Users/wangsiwei/Downloads/SocialPlatform-main/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/controller/LabelController.java
+/Users/wangsiwei/Downloads/SocialPlatform-main/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/service/LabelService.java
+/Users/wangsiwei/Downloads/SocialPlatform-main/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/pojo/Label.java
+/Users/wangsiwei/Downloads/SocialPlatform-main/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/dao/LabelDao.java
+/Users/wangsiwei/Downloads/SocialPlatform-main/tensquare_parent/tensquare_base/src/main/java/com/tensquare/base/BaseApplication.java

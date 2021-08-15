@@ -7,6 +7,14 @@ spring:
     url: jdbc:mysql://localhost:3306/tensquare_article?serverTimezone=Europe/Rome
     username: root
     password: Wsw981017@
+  main:
+      allow-bean-definition-overriding: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka/
+  instance:
+    prefer-ip-address: true
 # Mybatis-Plus 配置
 mybatis-plus:
   #  mapper-locations: classpath:/mapper/*Mapper.xml
