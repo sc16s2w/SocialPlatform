@@ -181,6 +181,22 @@ public class ArticleController {
         return new Result(true,StatusCode.OK,"查询成功",result);
     }
 
+    /**
+     * 订阅或者取消订阅文章作者
+     * @param map
+     * @return
+     */
+    @PostMapping("/subscribe")
+    public Result subscribe(@RequestBody Map map){
+        Boolean flag = articleService.subscribe(map.get("userId").toString(), map.get("articleId").toString());
+        if (flag) {
+            return new Result(true, StatusCode.OK, "订阅成功");
+        } else {
+            return new Result(true, StatusCode.OK, "订阅取消");
+        }
+
+    }
+
 
 
 }

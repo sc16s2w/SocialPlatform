@@ -115,7 +115,7 @@ public class LabelService {
             }
         }
         Page<Label> data = new Page<>(page,size);
-        List<Label> list = this.labeldao.selectList(wrapper);
+        List<Label> list = this.labeldao.selectPage(data,wrapper);
         data.setRecords(list);
         return data;
     }
