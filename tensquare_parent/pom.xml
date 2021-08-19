@@ -18,6 +18,7 @@
         <module>tensquare_eureka</module>
         <module>tensquare_encrypt</module>
         <module>tensquare_notice</module>
+        <module>tensquare_recruit</module>
     </modules>
 
     <properties>

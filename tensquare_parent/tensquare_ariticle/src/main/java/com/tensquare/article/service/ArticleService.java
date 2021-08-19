@@ -2,13 +2,17 @@ package com.tensquare.article.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.tensquare.article.client.NoticeClient;
 import com.tensquare.article.dao.ArticleDao;
 import com.tensquare.article.pojo.Article;
+import com.tensquare.notice.pojo.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import util.IdWorker;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +28,9 @@ public class ArticleService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private NoticeClient noticeClient;
 
 
     /**
@@ -49,6 +56,7 @@ public class ArticleService {
      * @param article
      * @return
      */
+    @Transactional
     public void addArticle(Article article) {
         //使用分布式id生成器
         article.setId(idWorker.nextId()+"");
@@ -58,7 +66,27 @@ public class ArticleService {
         article.setComment(0);
         //新增
         this.articleDao.insert(article);
-
+        //找到所有的订阅者
+        String authorKey = "article_author_" + article.getUserid();
+        Set<String> set = redisTemplate.boundSetOps(authorKey).members();
+        Notice notice = null;//增强代码的复用度
+        if(set!=null||set.size()>0){
+            for(String followers:set){
+                //生成所有的消息
+                notice = new Notice();
+                notice.setId(idWorker.nextId()+"");
+                notice.setOperatorId(article.getUserid());
+                notice.setReceiverId(followers);
+                notice.setAction("publish");
+                notice.setTargetType("article");
+                notice.setTargetId(article.getId());
+                notice.setCreatetime(new Date());
+                notice.setType("sys");
+                notice.setState("0");
+                //给订阅者发送消息
+                this.noticeClient.addNotice(notice);
+            }
+        }
     }
 
     /**
@@ -111,10 +139,24 @@ public class ArticleService {
      * 点赞数+1
      * @param id
      */
+    @Transactional
     public void thumbUp(String id) {
         Article article = this.articleDao.selectById(id);
         article.setThumbup(article.getThumbup()+1);
         this.articleDao.updateById(article);
+        String authorKey = "article_author_" + article.getUserid();
+        String userId = "2";
+        Notice notice = new Notice();
+        notice.setId(idWorker.nextId()+"");
+        notice.setReceiverId(article.getUserid());
+        notice.setOperatorId(userId);
+        notice.setAction("thumbup");
+        notice.setTargetType("Article");
+        notice.setTargetId(article.getId());
+        notice.setCreatetime(new Date());
+        notice.setType("sys");
+        notice.setState("0");
+        this.noticeClient.addNotice(notice);
     }
 
     /**

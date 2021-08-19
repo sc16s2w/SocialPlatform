@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tensquare_ariticle" />
         <module name="tensquare_notice" />
+        <module name="tensquare_recruit" />
         <module name="tensquare_encrypt" />
         <module name="tensquare_common" />
         <module name="mongo_demo" />
@@ -28,6 +29,7 @@
       <module name="tensquare_eureka" options="-parameters" />
       <module name="tensquare_notice" options="-parameters" />
       <module name="tensquare_parent" options="-parameters" />
+      <module name="tensquare_recruit" options="-parameters" />
       <module name="tensquare_split" options="-parameters" />
       <module name="tensquare_user" options="-parameters" />
     </option>
