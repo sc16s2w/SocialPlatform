@@ -6,6 +6,12 @@ import com.tensquare.article.client.NoticeClient;
 import com.tensquare.article.dao.ArticleDao;
 import com.tensquare.article.pojo.Article;
 import com.tensquare.notice.pojo.Notice;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -31,6 +37,9 @@ public class ArticleService {
 
     @Autowired
     private NoticeClient noticeClient;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     /**
@@ -87,6 +96,7 @@ public class ArticleService {
                 this.noticeClient.addNotice(notice);
             }
         }
+        rabbitTemplate.convertAndSend("article_subscribe", article.getUserid(), article.getId());
     }
 
     /**
@@ -222,22 +232,61 @@ public class ArticleService {
      * @return
      */
     public Boolean subscribe(String userId, String articleId) {
-        //根据文章id查询文章作者id
+        //传统方法
+//        //根据文章id查询文章作者id
+//        String authorId = articleDao.selectById(articleId).getUserid();
+//        String userKey = "article_subscribe_" + userId;
+//        String authorKey = "article_author_" + authorId;
+//        //查询该用户是否已经订阅作者
+//        Boolean flag = this.redisTemplate.boundSetOps(userKey).isMember(authorId);
+//        if (flag) {
+//            //如果为flag为true，已经订阅,则取消订阅
+//            this.redisTemplate.boundSetOps(userKey).remove(authorId);
+//            this.redisTemplate.boundSetOps(authorKey).remove(userId);
+//            return false;
+//        } else {
+//            // 如果为flag为false，没有订阅，则进行订阅
+//            this.redisTemplate.boundSetOps(userKey).add(authorId);
+//            this.redisTemplate.boundSetOps(authorKey).add(userId);
+//            return true;
+//        }
+        //改造方法,利用rabbitMQ
+        //查询文章id
         String authorId = articleDao.selectById(articleId).getUserid();
         String userKey = "article_subscribe_" + userId;
         String authorKey = "article_author_" + authorId;
-        //查询该用户是否已经订阅作者
-        Boolean flag = this.redisTemplate.boundSetOps(userKey).isMember(authorId);
+        //创建rabbitmq管理器
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(rabbitTemplate.getConnectionFactory());
+        //声明交换机，处理文章新增消息
+        DirectExchange exchange = new DirectExchange("article_subscribe");
+        rabbitAdmin.declareExchange(exchange);
+        //声明队列，每个用户都有自己的队列。通过用户ID进行区分 true表示是否持久化存储
+        Queue queue = new Queue("article_subscribe"+userId,true);
+        //声明交换机和队列的绑定关系，需要确保队列只收到对应作者的新增文章消息
+        //第一个是队列，第二个是交换机，第三个是队列
+        Binding binding = BindingBuilder.bind(queue).to(exchange).with(authorId);
+        //如果取消订阅，删除队列绑定徐爱许
+        //如果订阅，增加绑定关系
+        Boolean flag = redisTemplate.boundSetOps(userKey).isMember(authorId);
         if (flag) {
             //如果为flag为true，已经订阅,则取消订阅
-            this.redisTemplate.boundSetOps(userKey).remove(authorId);
-            this.redisTemplate.boundSetOps(authorKey).remove(userId);
+            redisTemplate.boundSetOps(userKey).remove(authorId);
+            redisTemplate.boundSetOps(authorKey).remove(userId);
+
+            //删除绑定的队列
+            rabbitAdmin.removeBinding(binding);
             return false;
         } else {
             // 如果为flag为false，没有订阅，则进行订阅
-            this.redisTemplate.boundSetOps(userKey).add(authorId);
-            this.redisTemplate.boundSetOps(authorKey).add(userId);
+            redisTemplate.boundSetOps(userKey).add(authorId);
+            redisTemplate.boundSetOps(authorKey).add(userId);
+
+            //声明队列和绑定队列
+            rabbitAdmin.declareQueue(queue);
+            rabbitAdmin.declareBinding(binding);
+
             return true;
         }
+
     }
 }

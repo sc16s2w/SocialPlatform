@@ -101,4 +101,24 @@ public class JobController {
         return new Result(true,StatusCode.OK,"查询工作成功",result);
     }
 
+    /**
+     * 查询推荐的工作
+     * @return
+     */
+    @GetMapping("/search/recommend")
+    public Result getRecommendByTime(){
+        List<Job> result = this.jobService.getRecommendBytime();
+        return new Result(true,StatusCode.OK,"查询推荐工作",result);
+    }
+
+    /**
+     * 查询最新发布的工作
+     * @return
+     */
+    @GetMapping("/search/newlist")
+    public Result getNewJObs(){
+        List<Job> result = this.jobService.getNewJobs();
+        return new Result(true,StatusCode.OK,"查询最新发布的工作",result);
+    }
+
 }

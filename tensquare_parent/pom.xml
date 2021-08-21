@@ -19,6 +19,7 @@
         <module>tensquare_encrypt</module>
         <module>tensquare_notice</module>
         <module>tensquare_recruit</module>
+        <module>tensquare_qa</module>
     </modules>
 
     <properties>

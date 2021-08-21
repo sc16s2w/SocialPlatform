@@ -14,6 +14,7 @@
         <module name="mongo_demo" />
         <module name="tensquare_user" />
         <module name="tensquare_base" />
+        <module name="tensquare_qa" />
         <module name="tensquare_eureka" />
         <module name="tensquare_split" />
       </profile>
@@ -29,6 +30,7 @@
       <module name="tensquare_eureka" options="-parameters" />
       <module name="tensquare_notice" options="-parameters" />
       <module name="tensquare_parent" options="-parameters" />
+      <module name="tensquare_qa" options="-parameters" />
       <module name="tensquare_recruit" options="-parameters" />
       <module name="tensquare_split" options="-parameters" />
       <module name="tensquare_user" options="-parameters" />
