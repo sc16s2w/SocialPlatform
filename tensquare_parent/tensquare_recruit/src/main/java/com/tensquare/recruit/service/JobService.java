@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
 
+import javax.management.Query;
 import java.util.*;
 
 @Service
@@ -100,6 +101,24 @@ public class JobService {
         }
         Page<Job> result = new Page<>(page,size);
         result.setRecords(this.jobDao.selectPage(result,wrapper));
+        return result;
+    }
+
+    /**
+     * 查询推荐的工作
+     * @return
+     */
+    public List<Job> getRecommendBytime() {
+        List<Job> result = this.jobDao.selectList(new EntityWrapper<Job>().eq("state","2").orderBy("createtime",false));
+        return result;
+    }
+
+    /**
+     * 查询最新发布的工作
+     * @return
+     */
+    public List<Job> getNewJobs() {
+        List<Job> result = this.jobDao.selectList(new EntityWrapper<Job>().orderBy("createtime",false));
         return result;
     }
 }

@@ -1,29 +1,17 @@
 server:
-  port: 9004
+  port: 9003
 spring:
   application:
-    name: tensquare-article
+    name: tensquare-qa
   datasource:
-    url: jdbc:mysql://localhost:3306/tensquare_article?serverTimezone=Europe/Rome
+    url: jdbc:mysql://localhost:3306/tensquare_qa?useSSL=false&serverTimezone=Europe/Rome
     username: root
     password: Wsw981017@
-  main:
-      allow-bean-definition-overriding: true
-  redis:
-   host: 127.0.0.1
-  rabbitmq:
-    host: 127.0.0.1
-eureka:
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:6868/eureka/
-  instance:
-    prefer-ip-address: true
 # Mybatis-Plus 配置
 mybatis-plus:
   #  mapper-locations: classpath:/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.tensquare.article.pojo
+  typeAliasesPackage: com.tensquare.qa.pojo
   global-config:
     id-type: 1  #0:数据库ID自增   1:用户输入id
     db-column-underline: false
