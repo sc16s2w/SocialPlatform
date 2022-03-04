@@ -1,6 +1,7 @@
-基于springboot和springcloud的一个社交平台 只完成后端部分，后面有空再搭前端<br>
-已完成的点：<br>
-1.公共类 规范输出，分页，以及返回状态码<br>
-2.文章微服务：可以发布文章，修改文章，删除文章，查询所有文章，查询单个文章，针对某个文章属性进行搜索，对文章进行审核，点赞<br>
-3.评论微服务：因为评论的数据量较大，用nosql mongodb进行储存，完成对评论的增删改查，以及查询出指定文章的评论，对评论的点赞为mongodb自带的mongodbtemplate完成 使用redis避免重复用户点赞<br>
-4.添加网关服务<br>
+A social platform based on springboot and springcloud only completes the back-end part, and then takes the front-end when there is time
+<br>
+Completed points:<br> 
+1. Public class specification output, paging, and return status code<br> 
+2. Article  Microservices: can publish articles, modify articles, delete articles, query all articles, query a single article, search for a certain article attribute, review articles, like <br> 
+3. Comment microservice: because of the amount of comment data  Large, use nosql mongodb for storage, complete the addition, deletion and modification of comments, and query the comments of the specified article, the likes of the comments are the mongodbtemplate that comes with mongodb to complete the use of redis to avoid repeated user likes<br> 
+4. Add  Gateway Service<br>
